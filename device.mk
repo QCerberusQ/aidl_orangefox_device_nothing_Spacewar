@@ -21,9 +21,6 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_TARGET_VNDK_VERSION := 31
 
-
-TW_FRAMERATE := 120
-
 # -----------------------------------------------------------------------------
 # A/B OTA
 # -----------------------------------------------------------------------------
@@ -138,11 +135,6 @@ SOONG_CONFIG_ufsbsg_ufsframework := bsg
 
 # Support to compile recovery without msm headers
 TARGET_HAS_GENERIC_KERNEL_HEADERS := true
-
-# -----------------------------------------------------------------------------
-# TW
-# -----------------------------------------------------------------------------
-TW_EXCLUDE_APEX := true
 
 # -----------------------------------------------------------------------------
 # SKIP VERIFY GAPPS
