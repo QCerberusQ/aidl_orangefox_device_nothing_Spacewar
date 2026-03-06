@@ -64,10 +64,6 @@ on property:dev.mnt.blk.firmware=*
     start health-hal-2-1
     start vendor.qti.vibrator
 
-    umount /firmware
-    umount /bt_firmware
-    umount /dsp
-
 on property:ro.boot.usbcontroller=*
     setprop sys.usb.controller ${ro.boot.usbcontroller}
 
