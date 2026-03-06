@@ -33,6 +33,7 @@ OF_QUICK_BACKUP_LIST := /boot;/data;/metadata;/vendor_boot;/dtbo;
 # -----------------------------------------------------------------------------
 # System & Partition Tools (Advanced)
 # -----------------------------------------------------------------------------
+OF_USE_AIDL_BOOT_CONTROL := 1
 OF_NO_TREBLE_COMPATIBILITY_CHECK := 1
 # Dinamik partisyonlar (Super) için araçlar
 OF_ENABLE_LPTOOLS := 1
