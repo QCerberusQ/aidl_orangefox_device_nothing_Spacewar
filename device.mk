@@ -61,14 +61,8 @@ AB_OTA_POSTINSTALL_CONFIG += \
 # -----------------------------------------------------------------------------
 # Boot kontrolü için bunlar ŞART, ama gereksiz update_engine servislerini sildik.
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.2-impl-qti \
     android.hardware.boot-service.qti \
-    android.hardware.boot-service.qti.recovery \
-    libgptutils.nothing \
-    bootctl
-
-PRODUCT_PACKAGES_DEBUG += \
-    bootctl
+    android.hardware.boot-service.qti.recovery
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
@@ -83,8 +77,7 @@ PRODUCT_PACKAGES += \
 # -----------------------------------------------------------------------------
 # Mock (Taklit) HAL silindi. Sadece binary kalsın.
 PRODUCT_PACKAGES += \
-    fastbootd \
-	android.hardware.fastboot@1.1-impl-mock
+    fastbootd
 
 # -----------------------------------------------------------------------------
 # Crypto / Decryption
@@ -134,14 +127,11 @@ PRODUCT_PACKAGES += \
 # -----------------------------------------------------------------------------
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
-    hardware/qcom-caf/bootctrl \
     vendor/qcom/opensource/commonsys-intf/display
 
 # -----------------------------------------------------------------------------
 # differentiate legacy 'sg' or 'bsg' framework
 # -----------------------------------------------------------------------------
-# namespace definition for librecovery_updater
-# differentiate legacy 'sg' or 'bsg' framework
 SOONG_CONFIG_NAMESPACES += ufsbsg
 SOONG_CONFIG_ufsbsg += ufsframework
 SOONG_CONFIG_ufsbsg_ufsframework := bsg
