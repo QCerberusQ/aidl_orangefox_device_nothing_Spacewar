@@ -1,0 +1,82 @@
+import /init.recovery.qcom_decrypt.rc
+
+# ---------------------------------------------------------------------
+# Qualcomm Recovery Init – Nothing Phone (1) / Spacewar
+# OPTIMIZED: Boot Speed & Mount Fix
+# ---------------------------------------------------------------------
+
+on early-init
+    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
+
+on init
+    exec u:r:recovery:s0 -- /system/bin/wrappedkey-fix.sh
+    write /sys/class/backlight/panel0-backlight/brightness 200
+    mkdir /dev/fscklogs 0770 root system
+    setprop sys.usb.configfs 1
+    write /sys/class/power_supply/usb/otg_switch 1
+
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+    # 1. Firmware Mount
+    mkdir /firmware
+    wait /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix}
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
+
+    # 2. DSP Mount
+    mkdir /dsp
+    wait /dev/block/bootdevice/by-name/dsp${ro.boot.slot_suffix}
+    mount ext4 /dev/block/bootdevice/by-name/dsp${ro.boot.slot_suffix} /dsp ro 
+
+    # Bluetooth Mount
+    mkdir /bt_firmware
+    wait /dev/block/bootdevice/by-name/bluetooth${ro.boot.slot_suffix}
+    mount vfat /dev/block/bootdevice/by-name/bluetooth${ro.boot.slot_suffix} /bt_firmware ro
+
+    # Symlinkler
+    symlink /firmware /vendor/firmware_mnt
+    symlink /bt_firmware /vendor/bt_firmware
+    symlink /dsp /vendor/dsp
+    
+    chown root system /dev/fscklogs/log
+    chmod 0770 /dev/fscklogs/log
+
+on post-fs
+    start keymasterd
+    start boot-hal-1-2
+
+on boot
+    setprop sys.usb.config none
+
+# Firmware hazır olduğunda donanım servislerini ateşle
+on property:dev.mnt.blk.firmware=*
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+    
+    # Titreşim motoru ayarı
+    wait /sys/class/qcom-haptics/fifo_vmax
+    write /sys/class/qcom-haptics/fifo_vmax 1500mv
+    
+    start health-hal-2-1
+    start vendor.qti.vibrator
+
+on property:ro.boot.usbcontroller=*
+    setprop sys.usb.controller ${ro.boot.usbcontroller}
+    wait /sys/bus/platform/devices/a600000.ssusb/mode
+    write /sys/bus/platform/devices/a600000.ssusb/mode peripheral
+    setprop sys.usb.config mtp,adb
+
+# --- Servis Tanımları ---
+
+service keymasterd /system/bin/keymasterd
+     user root
+     group root
+     disabled
+     seclabel u:r:recovery:s0
+
+service health-hal-2-1 /system/bin/android.hardware.health@2.1-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
