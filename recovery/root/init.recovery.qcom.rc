@@ -50,7 +50,7 @@ on post-fs
     start keymasterd
 
 on boot
-    setprop sys.usb.config none
+    setprop sys.usb.config mtp,adb
 
 # Firmware hazır olduğunda donanım servislerini ateşle
 on property:dev.mnt.blk.firmware=*
