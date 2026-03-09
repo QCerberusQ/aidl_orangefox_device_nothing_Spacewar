@@ -88,24 +88,12 @@ PRODUCT_PACKAGES += \
 # Recovery Libraries & Display
 # -----------------------------------------------------------------------------
 TARGET_RECOVERY_DEVICE_MODULES += \
-    android.hidl.allocator@1.0 \
-    android.hidl.memory@1.0 \
-    android.hidl.memory.token@1.0 \
-    libdmabufheap \
-    libhidlmemory \
-    libdisplayconfig.qti \
     libion \
     vendor.display.config@1.0 \
     vendor.display.config@2.0
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.allocator@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.memory@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.memory.token@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libdmabufheap.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libhidlmemory.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
-    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/libdisplayconfig.qti.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
 
