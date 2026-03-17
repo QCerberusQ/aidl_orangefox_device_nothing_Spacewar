@@ -20,6 +20,9 @@ LOCAL_PATH := device/nothing/Spacewar
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_TARGET_VNDK_VERSION := 31
+PRODUCT_VIRTUAL_AB_COW_VERSION := 2
+
+TW_FRAMERATE := 120
 
 # -----------------------------------------------------------------------------
 # A/B OTA
@@ -56,7 +59,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
 # -----------------------------------------------------------------------------
 # Boot Control (NP1 Custom)
 # -----------------------------------------------------------------------------
-# Boot kontrolü için bunlar ŞART, ama gereksiz update_engine servislerini sildik.
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.qti \
     android.hardware.boot-service.qti.recovery
@@ -69,10 +71,16 @@ PRODUCT_PACKAGES += \
     update_verifier \
     update_engine_sideload
 
+PRODUCT_PACKAGES += \
+	snapuserd \
+	liburing \
+	libz \
+	liblz4 \
+	libsnapshot_cow
+
 # -----------------------------------------------------------------------------
 # Fastbootd
 # -----------------------------------------------------------------------------
-# Mock (Taklit) HAL silindi. Sadece binary kalsın.
 PRODUCT_PACKAGES += \
     fastbootd
 
@@ -97,7 +105,6 @@ RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
 
-
 # -----------------------------------------------------------------------------
 # Health HAL
 # -----------------------------------------------------------------------------
@@ -112,6 +119,7 @@ PRODUCT_PACKAGES += \
 # -----------------------------------------------------------------------------
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
+    hardware/qcom-caf/bootctrl \
     vendor/qcom/opensource/commonsys-intf/display
 
 # -----------------------------------------------------------------------------
@@ -125,16 +133,9 @@ SOONG_CONFIG_ufsbsg_ufsframework := bsg
 TARGET_HAS_GENERIC_KERNEL_HEADERS := true
 
 # -----------------------------------------------------------------------------
-# SKIP VERIFY GAPPS
+# TW
 # -----------------------------------------------------------------------------
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.virtual_ab.skip_verify_source_hash=true
-
-# -----------------------------------------------------------------------------
-# SKIP SNAPSHOT
-# -----------------------------------------------------------------------------
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.virtual_ab.skip_snapshot_creation=true
+TW_EXCLUDE_APEX := true
 
 # -----------------------------------------------------------------------------
 # FUSE PASSTHROUGH
