@@ -32,6 +32,7 @@ OF_ENABLE_LPTOOLS := 1
 OF_ENABLE_ALL_PARTITION_TOOLS := 1
 OF_KEEP_DM_PATH := 1
 OF_CHECK_STAGED_OTA := 1
+OF_USE_AIDL_BOOT_CONTROL := 1
 
 # -----------------------------------------------------------------------------
 # Data Format & Encryption (SAF VE RİSKSİZ)
