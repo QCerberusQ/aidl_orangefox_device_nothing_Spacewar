@@ -13,6 +13,7 @@ DEVICE_PATH := device/nothing/Spacewar
 # Platform
 # -----------------------------------------------------------------------------
 TARGET_BOARD_PLATFORM := lahaina
+TARGET_HAS_GENERIC_KERNEL_HEADERS := true
 
 # -----------------------------------------------------------------------------
 # A/B
@@ -106,7 +107,7 @@ BOARD_KERNEL_CMDLINE += pcie_ports=compat
 BOARD_KERNEL_CMDLINE += earlycon=msm_geni_serial,0x880000
 
 # Dinamik bölümlerin görünmesi için KRİTİK (Bunu unutma!)
-BOARD_KERNEL_CMDLINE += loop.max_part=7
+BOARD_KERNEL_CMDLINE += loop.max_part=16
 
 # Firewall/Ağ hatalarını engeller
 BOARD_KERNEL_CMDLINE += ip6table_raw.raw_before_defrag=1
@@ -141,12 +142,6 @@ BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_COPY_OUT_VENDOR_BOOT := vendor_boot
 
 # -----------------------------------------------------------------------------
-# vAB Compress
-# -----------------------------------------------------------------------------
-BOARD_VIRTUAL_AB_COMPRESSION := true
-BOARD_VIRTUAL_AB_COMPRESSION_METHOD := none
-
-# -----------------------------------------------------------------------------
 # System as root
 # -----------------------------------------------------------------------------
 BOARD_ROOT_EXTRA_FOLDERS := bluetooth dsp firmware persist
@@ -164,7 +159,7 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 TARGET_NO_RECOVERY := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-BOARD_USES_METADATA_PARTITION := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
 
 # -----------------------------------------------------------------------------
 # AVB
@@ -181,7 +176,8 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
 # Crypto
 # -----------------------------------------------------------------------------
 TW_INCLUDE_CRYPTO := true
-#TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_CRYPTO_FBE := true
+BOARD_USES_METADATA_PARTITION := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_QCOM_FBE_DECRYPTION := true
 TW_PREPARE_DATA_MEDIA_EARLY := true
@@ -195,32 +191,44 @@ BOOT_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 # -----------------------------------------------------------------------------
 # TWRP Configuration
 # -----------------------------------------------------------------------------
+
+# Display
 TW_THEME := portrait_hdpi
 TW_MAX_BRIGHTNESS := 2047
 TW_DEFAULT_BRIGHTNESS := 1200
-#TW_SKIP_ADDITIONAL_FSTAB := true
-RECOVERY_SDCARD_ON_DATA := true
-TARGET_RECOVERY_QCOM_RTC_FIX := true
-TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_ENABLE_FS_COMPRESSION := true
-TW_INCLUDE_NTFS_3G := true
-TW_USE_TOOLBOX := true
-#TW_SCREEN_BLANK_ON_BOOT := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_INCLUDE_RESETPROP := true
-#TW_HAS_EDL_MODE := true
-TW_INCLUDE_REPACKTOOLS := true
-TWRP_INCLUDE_LOGCAT := true
-TW_INCLUDE_LIBRESETPROP := true
-TARGET_USES_LOGD := true
-TARGET_USES_MKE2FS := true
-TW_SUPPORT_INPUT_AIDL_HAPTICS := true
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
+TW_FRAMERATE := 120
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+
+# Storage
+RECOVERY_SDCARD_ON_DATA := true
+TW_ENABLE_FS_COMPRESSION := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_INCLUDE_NTFS_3G := true
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
+
+# Input
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+TW_SUPPORT_INPUT_AIDL_HAPTICS_FIX_OFF := true
+
+# Tools
+TW_USE_TOOLBOX := true
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_LIBRESETPROP := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_FASTBOOTD := true
+TW_INCLUDE_LPDUMP := true
+TW_INCLUDE_LPTOOLS := true
+TW_EXCLUDE_APEX := true
+TARGET_USES_MKE2FS := true
+
+# Logging
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
+
+# Hardware
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/devices/virtual/thermal/thermal_zone50/temp"
 TW_USE_HEALTH_SERVICES_FOR_BATTERY := true
-TW_SUPPORT_INPUT_AIDL_HAPTICS_FIX_OFF := true
-TW_INCLUDE_FASTBOOTD := true
 
 # -----------------------------------------------------------------------------
 # Modules Load
