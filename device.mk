@@ -7,7 +7,6 @@
 # Base inherits
 # -----------------------------------------------------------------------------
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
@@ -20,29 +19,11 @@ LOCAL_PATH := device/nothing/Spacewar
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_TARGET_VNDK_VERSION := 31
-PRODUCT_VIRTUAL_AB_COW_VERSION := 2
-
-TW_FRAMERATE := 120
 
 # -----------------------------------------------------------------------------
 # A/B OTA
 # -----------------------------------------------------------------------------
 ENABLE_VIRTUAL_AB := true
-
-AB_OTA_UPDATER := true
-
-AB_OTA_PARTITIONS += \
-    boot \
-    dtbo \
-    odm \
-    product \
-    system \
-    system_ext \
-    vbmeta \
-    vbmeta_system \
-    vendor \
-    vendor_dlkm \
-    vendor_boot
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -60,8 +41,11 @@ AB_OTA_POSTINSTALL_CONFIG += \
 # Boot Control (NP1 Custom)
 # -----------------------------------------------------------------------------
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.qti \
-    android.hardware.boot-service.qti.recovery
+    android.hardware.boot@1.2-impl-qti \
+    android.hardware.boot@1.2-impl-qti.recovery \
+    android.hardware.boot@1.2-service \
+    libgptutils.nothing \
+    bootctl
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
@@ -72,11 +56,11 @@ PRODUCT_PACKAGES += \
     update_engine_sideload
 
 PRODUCT_PACKAGES += \
-	snapuserd \
-	liburing \
-	libz \
-	liblz4 \
-	libsnapshot_cow
+    snapuserd \
+    liburing \
+    libz \
+    liblz4 \
+    libsnapshot_cow
 
 # -----------------------------------------------------------------------------
 # Fastbootd
@@ -108,7 +92,6 @@ RECOVERY_LIBRARY_SOURCE_FILES += \
 # -----------------------------------------------------------------------------
 # Health HAL
 # -----------------------------------------------------------------------------
-# Health HAL
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
     android.hardware.health@2.1-service \
@@ -128,14 +111,6 @@ PRODUCT_SOONG_NAMESPACES += \
 SOONG_CONFIG_NAMESPACES += ufsbsg
 SOONG_CONFIG_ufsbsg += ufsframework
 SOONG_CONFIG_ufsbsg_ufsframework := bsg
-
-# Support to compile recovery without msm headers
-TARGET_HAS_GENERIC_KERNEL_HEADERS := true
-
-# -----------------------------------------------------------------------------
-# TW
-# -----------------------------------------------------------------------------
-TW_EXCLUDE_APEX := true
 
 # -----------------------------------------------------------------------------
 # FUSE PASSTHROUGH
